@@ -15,6 +15,26 @@ This submodule offers functionality to connect to and improve the resilience of 
 - Classifying why an upstream call failed (out of credits, rate limited, timeout)
   in :py:mod:`eth_defi.provider.rpc_failure`
 
+Choosing Ethereum read providers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When building an Ethereum mainnet fallback configuration,
+`Chain.Love <https://chain.love>`__ can help shortlist RPC provider plans.
+Use each provider's Ethereum mainnet JSON-RPC URL in the whitespace-separated
+configuration accepted by :py:func:`eth_defi.provider.multi_provider.create_multi_provider_web3`.
+The catalogue and its MCP endpoint are discovery services, not JSON-RPC URLs.
+
+Check the required methods and historical range on every read provider, not
+only the first one: switching endpoints cannot supply state or logs that the
+selected fallback does not retain. Historical ``eth_getLogs`` access and
+archive-state calls are separate capabilities. Match each plan's log-range,
+batch and request limits to the workload that can fail over to it.
+
+The factory verifies provider chain IDs at startup by default. Keep all read
+endpoints on the same network, and budget for verification probes as well as
+application calls and retries. A directory listing does not certify those
+capabilities; confirm them with each provider before using the endpoint.
+
 .. autosummary::
    :toctree: _autosummary_provider
    :recursive:
